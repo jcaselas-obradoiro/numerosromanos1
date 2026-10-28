@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Números romanos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Nunito:wght@400;700&display=swap">
+<style>
+:root{color-scheme:light;--bg:#e9edf0;--card:#f8f9fa;--ink:#18202e;--mut:#5a6578;--lapis:#1d3f72;--gold:#b8861f;--teal:#1f8a7d;--ok:#1d7a46;--bad:#b3261e;--line:#cfd6dd;--on:#fff;--stone:#dde3e8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#10151f;--card:#1a2232;--ink:#e8ecf2;--mut:#9aa6ba;--lapis:#7fa6e8;--gold:#e0b04a;--teal:#4fc5b5;--ok:#59c98a;--bad:#ff8a80;--line:#2c374c;--on:#10151f;--stone:#232d42}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#10151f;--card:#1a2232;--ink:#e8ecf2;--mut:#9aa6ba;--lapis:#7fa6e8;--gold:#e0b04a;--teal:#4fc5b5;--ok:#59c98a;--bad:#ff8a80;--line:#2c374c;--on:#10151f;--stone:#232d42}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;font-size:17px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+main{max-width:760px;margin:0 auto;padding:18px 16px 40px}
+h1,h2,.rom{font-family:Cinzel,Georgia,"Times New Roman",serif}
+h1{font-size:clamp(26px,6vw,38px);margin:6px 0 2px;letter-spacing:.04em;color:var(--lapis)}
+h2{font-size:20px;margin:0 0 10px;color:var(--lapis)}
+.sub{color:var(--mut);margin:0 0 16px}
+nav{display:flex;gap:6px;background:var(--stone);padding:5px;border-radius:14px;margin-bottom:16px;flex-wrap:wrap}
+nav button{flex:1;min-width:110px;border:0;background:transparent;color:var(--mut);font:700 15px Nunito,sans-serif;padding:10px 6px;border-radius:10px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--lapis);color:var(--on)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+label{display:block;font-weight:700;margin-bottom:6px}
+input[type=text],input[type=number]{width:100%;font:700 22px Nunito,sans-serif;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+input:focus{border-color:var(--lapis)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr}}
+.out{font-family:Cinzel,Georgia,serif;font-weight:800;font-size:clamp(28px,8vw,46px);color:var(--ink);text-shadow:0 1px 0 rgba(255,255,255,.7),0 -1px 0 rgba(0,0,0,.25);letter-spacing:.06em;word-break:break-all;min-height:1.3em;margin:10px 0 4px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .out{text-shadow:0 1px 0 rgba(0,0,0,.6),0 -1px 0 rgba(255,255,255,.18)}}
+.msg{color:var(--mut);min-height:1.4em}.bad{color:var(--bad)}.ok{color:var(--ok)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{background:var(--stone);border-radius:999px;padding:4px 12px;font-weight:700;font-size:15px}
+.chip b{font-family:Cinzel,Georgia,serif;color:var(--lapis)}
+.syms{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.sym{background:var(--stone);border-radius:12px;text-align:center;padding:8px 2px}
+.sym .rom{font-size:26px;font-weight:800;color:var(--lapis);display:block}
+.sym span:last-child{font-size:14px;color:var(--mut);font-weight:700}
+ul.rules{padding-left:20px;margin:0}ul.rules li{margin-bottom:8px}
+.pad{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pad button,.btn{font:800 22px Cinzel,Georgia,serif;min-width:52px;min-height:52px;border-radius:12px;border:2px solid var(--lapis);background:var(--card);color:var(--lapis);cursor:pointer;padding:0 14px}
+.btn{font:700 17px Nunito,sans-serif;background:var(--lapis);color:var(--on);min-height:48px}
+.btn.alt{background:transparent;color:var(--lapis)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.q{font-size:20px;font-weight:700;margin:6px 0 10px}
+.q .rom{font-size:34px;color:var(--lapis)}
+.score{color:var(--mut);font-weight:700}
+.letters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.lt{min-width:42px;text-align:center;border-radius:10px;padding:6px 4px;background:var(--stone);color:var(--mut);font:800 22px Cinzel,Georgia,serif}
+.lt small{display:block;font:700 12px Nunito,sans-serif}
+.lt.hit{background:var(--lapis);color:var(--on)}
+.lvl{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.lvl button{border:2px solid var(--line);background:transparent;color:var(--ink);font:700 15px Nunito,sans-serif;border-radius:999px;padding:6px 14px;cursor:pointer}
+.lvl button[aria-pressed="true"]{border-color:var(--teal);background:var(--teal);color:var(--on)}
+.fact{border-left:4px solid var(--gold);padding-left:12px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+#title{user-select:none;-webkit-user-select:none}
+.tbtn{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--card);font-size:22px;cursor:pointer;margin-top:6px}
+:root[data-theme="dark"] .out{text-shadow:0 1px 0 rgba(0,0,0,.6),0 -1px 0 rgba(255,255,255,.18)}
+.egg{display:none;position:fixed;inset:0;z-index:20;align-items:center;justify-content:center;padding:20px;background:rgba(10,14,24,.72)}
+.egg.on{display:flex}
+.eggbox{background:var(--card);border:3px solid var(--gold);border-radius:20px;padding:22px 18px;max-width:460px;width:100%;text-align:center}
+.eggbox h2{font-size:24px}
+.eggl{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.eggl .lt{animation:pop .4s backwards}
+@keyframes pop{from{opacity:0;transform:scale(.4)}}
+.fall{position:fixed;top:-40px;z-index:30;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+body.col{--bg:#8e2f24;--card:#f3e3c3;--ink:#2a1a10;--mut:#6a4a30;--lapis:#7a1f16;--gold:#b8861f;--stone:#e7d2a6;--line:#c9a96a;--on:#fff;background-image:linear-gradient(45deg,rgba(0,0,0,.12) 25%,transparent 25%,transparent 75%,rgba(0,0,0,.12) 75%),linear-gradient(45deg,rgba(0,0,0,.12) 25%,transparent 25%,transparent 75%,rgba(0,0,0,.12) 75%);background-size:44px 44px;background-position:0 0,22px 22px}
+body.col h1,body.col .sub{color:#f7e7c1}
+.decomp-table{width:100%;border-collapse:collapse;margin-top:10px}
+.decomp-table th,.decomp-table td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+.decomp-table th{color:var(--lapis);font-size:14px}
+.approx-card{background:var(--stone);border-radius:12px;padding:12px;text-align:center}
+.approx-card .val{font-size:20px;font-weight:800;color:var(--lapis);margin:4px 0}
+.approx-card .diff{font-size:13px;font-weight:700;color:var(--mut)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main>
+<div class="top"><h1 id="title">Números romanos</h1><button id="theme" class="tbtn" aria-label="Cambiar entre modo claro y oscuro"></button></div>
+<p class="sub">Convierte, aprende, descompón y descubre cuánto vale tu nombre.</p>
+<nav role="tablist">
+<button role="tab" aria-selected="true" data-t="conv">Convertir</button>
+<button role="tab" aria-selected="false" data-t="decomp">Aproximación y Descomposición</button>
+<button role="tab" aria-selected="false" data-t="learn">Aprender</button>
+<button role="tab" aria-selected="false" data-t="cur">Curiosidad</button>
+</nav>
+
+<section id="conv" class="on">
+<div class="grid2">
+<div class="card">
+<h2>Número → romano</h2>
+<label for="n">Escribe un número (1 a 3999)</label>
+<input id="n" type="number" inputmode="numeric" min="1" max="3999" placeholder="1994">
+<div class="out rom" id="nOut">&nbsp;</div>
+<div class="msg" id="nMsg"></div>
+<div class="chips" id="nChips"></div>
+</div>
+<div class="card">
+<h2>Romano → número</h2>
+<label for="r">Escribe un número romano</label>
+<input id="r" type="text" autocapitalize="characters" autocomplete="off" placeholder="MCMXCIV">
+<div class="out" id="rOut">&nbsp;</div>
+<div class="msg" id="rMsg"></div>
+<div class="chips" id="rChips"></div>
+</div>
+</div>
+</section>
+
+<section id="decomp">
+<div class="card">
+<h2>Descomposición paso a paso</h2>
+<label for="decIn">Escribe un número (arábigo o romano)</label>
+<input id="decIn" type="text" autocapitalize="characters" autocomplete="off" placeholder="1994 o MCMXCIV">
+<div class="out" id="decOut">&nbsp;</div>
+<div class="msg" id="decMsg"></div>
+<div id="decResult"></div>
+</div>
+
+<div class="card">
+<h2>Aproximación y Redondeo</h2>
+<p class="sub" style="margin-bottom:10px">Calcula las aproximaciones del número ingresado a la decena, centena y millar más cercanos.</p>
+<div class="grid3" id="approxGrid">
+<div class="approx-card"><div>A la Decena (10)</div><div class="val rom" id="appD">–</div><div class="diff" id="diffD">–</div></div>
+<div class="approx-card"><div>A la Centena (100)</div><div class="val rom" id="appC">–</div><div class="diff" id="diffC">–</div></div>
+<div class="approx-card"><div>Al Millar (1000)</div><div class="val rom" id="appM">–</div><div class="diff" id="diffM">–</div></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Reto: Descomposición y Aproximación</h2>
+<div class="q" id="qDecText"></div>
+<div class="row"><input id="qDecIn" type="text" autocapitalize="characters" autocomplete="off" style="max-width:240px" aria-label="Tu respuesta"><button class="btn" id="qDecGo">Comprobar</button></div>
+<div class="msg" id="qDecMsg"></div>
+<div class="score" id="qDecScore">Aciertos: 0 de 0 · Racha: 0</div>
+</div>
+</section>
+
+<section id="learn">
+<div class="card">
+<h2>Las 7 letras</h2>
+<div class="syms" id="syms"></div>
+</div>
+<div class="card">
+<h2>Las reglas</h2>
+<ul class="rules">
+<li><b>Suma:</b> si la letra pequeña va detrás, se suma. VI = 5 + 1 = 6.</li>
+<li><b>Resta:</b> si la letra pequeña va delante, se resta. IV = 5 − 1 = 4.</li>
+<li><b>Solo restan</b> I (delante de V y X), X (delante de L y C) y C (delante de D y M).</li>
+<li><b>Repetir:</b> una letra se repite como máximo 3 veces seguidas. III = 3, pero 4 es IV.</li>
+<li><b>V, L y D</b> nunca se repiten.</li>
+<li>El cero no existe en los números romanos.</li>
+</ul>
+</div>
+<div class="card">
+<h2>Constrúyelo tú</h2>
+<p class="sub" style="margin-bottom:0">Pulsa las letras y mira cuánto vale.</p>
+<div class="out" id="bOut">&nbsp;</div>
+<div class="msg" id="bMsg"></div>
+<div class="pad" id="pad"></div>
+<div class="row"><button class="btn alt" id="bBack">Borrar una</button><button class="btn alt" id="bClear">Empezar de nuevo</button></div>
+</div>
+<div class="card">
+<h2>Reto</h2>
+<div class="lvl" id="lvl">
+<button data-l="20" aria-pressed="true">Fácil (1–20)</button>
+<button data-l="100" aria-pressed="false">Medio (1–100)</button>
+<button data-l="3999" aria-pressed="false">Experto (1–3999)</button>
+</div>
+<div class="q" id="qText"></div>
+<div class="row"><input id="qIn" type="text" autocapitalize="characters" autocomplete="off" style="max-width:220px" aria-label="Tu respuesta"><button class="btn" id="qGo">Comprobar</button></div>
+<div class="msg" id="qMsg"></div>
+<div class="score" id="qScore">Aciertos: 0 de 0 · Racha: 0</div>
+</div>
+</section>
+
+<section id="cur">
+<div class="card">
+<h2>¿Cuánto vale tu nombre?</h2>
+<label for="nm">Escribe tu nombre</label>
+<input id="nm" type="text" autocomplete="off" placeholder="Por ejemplo: Lucía">
+<label style="margin-top:10px;font-weight:400"><input type="checkbox" id="uv" checked> Contar la U como V (los romanos escribían la U como V)</label>
+<div class="letters" id="letters"></div>
+<div class="out" id="nmOut">&nbsp;</div>
+<div class="msg" id="nmMsg"></div>
+</div>
+<div class="card fact">
+<h2>Sabías que…</h2>
+<p id="fact" style="margin-top:0"></p>
+<button class="btn alt" id="more">Otra curiosidad</button>
+</div>
+</section>
+</main>
+<div class="egg" id="egg"><div class="eggbox" role="dialog" aria-live="polite"><div class="eggl" id="eggL"></div><h2 id="eggT"></h2><p id="eggP"></p><button class="btn" id="eggX">Cerrar</button></div></div>
+
+<script>
+const R=[[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+const V={I:1,V:5,X:10,L:50,C:100,D:500,M:1000};
+const $=id=>document.getElementById(id);
+function toR(n){let s="";for(const [v,r] of R){while(n>=v){s+=r;n-=v}}return s}
+function fromR(s){s=s.toUpperCase().trim();if(!s||!/^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/.test(s))return null;let t=0;for(let i=0;i<s.length;i++){const a=V[s[i]],b=V[s[i+1]]||0;t+=a<b?-a:a}return t}
+function chips(el,items){el.textContent="";items.forEach(([r,v])=>{const c=document.createElement("span");c.className="chip";const b=document.createElement("b");b.textContent=r;c.append(b," = "+v);el.append(c)})}
+
+/* Tabs */
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));
+ document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===b.dataset.t));
+});
+
+/* Convertir */
+$("n").oninput=()=>{
+ const v=$("n").value.trim(),n=Number(v);
+ if(!v){$("nOut").textContent="\u00a0";$("nMsg").textContent="";$("nChips").textContent="";return}
+ if(!Number.isInteger(n)||n<1||n>3999){$("nOut").textContent="\u00a0";$("nMsg").className="msg bad";$("nMsg").textContent="Escribe un número entero entre 1 y 3999.";$("nChips").textContent="";return}
+ $("nOut").textContent=toR(n);$("nMsg").className="msg";$("nMsg").textContent=n+" se escribe así:";
+ const p=[];for(let m=1000;m>=1;m/=10){const d=Math.floor(n/m)%10;if(d)p.push([toR(d*m),d*m])}chips($("nChips"),p)
+};
+$("r").oninput=()=>{
+ const s=$("r").value.trim().toUpperCase();
+ if(!s){$("rOut").textContent="\u00a0";$("rMsg").textContent="";$("rChips").textContent="";return}
+ const n=fromR(s);
+ if(n===null){$("rOut").textContent="\u00a0";$("rMsg").className="msg bad";$("rChips").textContent="";
+  $("rMsg").textContent=/[^MDCLXVI]/.test(s)?"Solo se pueden usar las letras I, V, X, L, C, D y M.":"Ese número romano no está bien escrito. Recuerda: máximo 3 letras iguales seguidas (4 es IV, no IIII).";return}
+ $("rOut").textContent=n;$("rOut").className="out";$("rMsg").className="msg";$("rMsg").textContent=s+" vale:";
+ chips($("rChips"),(s.match(/CM|CD|XC|XL|IX|IV|[MDCLXVI]/g)).map(t=>[t,fromR(t)]))
+};
+
+/* Descomposición y Aproximación */
+function updateDecomp(){
+ const val=$("decIn").value.trim().toUpperCase();
+ const decRes=$("decResult");
+ if(!val){
+  $("decOut").textContent="\u00a0";$("decMsg").textContent="";decRes.innerHTML="";
+  $("appD").textContent="–";$("appC").textContent="–";$("appM").textContent="–";
+  $("diffD").textContent="–";$("diffC").textContent="–";$("diffM").textContent="–";
+  return;
+ }
+ let n=null;
+ if(/^\d+$/.test(val)){
+  n=parseInt(val,10);
+  if(n<1||n>3999){
+   $("decOut").textContent="\u00a0";$("decMsg").className="msg bad";$("decMsg").textContent="Escribe un número entero entre 1 y 3999.";decRes.innerHTML="";return;
+  }
+ }else{
+  n=fromR(val);
+  if(n===null){
+   $("decOut").textContent="\u00a0";$("decMsg").className="msg bad";$("decMsg").textContent="Número romano o arábigo no válido.";decRes.innerHTML="";return;
+  }
+ }
+
+ $("decMsg").className="msg";
+ $("decMsg").textContent=`Descomposición del número ${n} (${toR(n)}):`;
+ $("decOut").textContent=`${n} = ${toR(n)}`;
+
+ const units=[
+  {name:"Unidades de millar",val:Math.floor(n/1000)*1000},
+  {name:"Centenas",val:Math.floor((n%1000)/100)*100},
+  {name:"Decenas",val:Math.floor((n%100)/10)*10},
+  {name:"Unidades",val:n%10}
+ ].filter(u=>u.val>0);
+
+ const exprAr=units.map(u=>u.val).join(" + ");
+ const exprRom=units.map(u=>toR(u.val)).join(" + ");
+
+ let html=`<p style="margin:10px 0 6px"><b>Descomposición aditiva:</b> ${n} = ${exprAr}</p>`;
+ html+=`<p style="margin:0 0 12px"><b>Descomposición romana:</b> ${toR(n)} = ${exprRom}</p>`;
+ html+=`<table class="decomp-table"><thead><tr><th>Posición</th><th>Valor</th><th>Romano</th><th>Explicación</th></tr></thead><tbody>`;
+
+ units.forEach(u=>{
+  const r=toR(u.val);
+  let exp="";
+  if(r==="CM") exp="1000 − 100 (resta C a M)";
+  else if(r==="CD") exp="500 − 100 (resta C a D)";
+  else if(r==="XC") exp="100 − 10 (resta X a C)";
+  else if(r==="XL") exp="50 − 10 (resta X a L)";
+  else if(r==="IX") exp="10 − 1 (resta I a X)";
+  else if(r==="IV") exp="5 − 1 (resta I a V)";
+  else if(u.val>=1000) exp=`${u.val/1000} millar(es) M`;
+  else if(u.val>=500) exp=`500 (D) + ${(u.val-500)/100} centena(s) C`;
+  else if(u.val>=100) exp=`${u.val/100} centena(s) C`;
+  else if(u.val>=50) exp=`50 (L) + ${(u.val-50)/10} decena(s) X`;
+  else if(u.val>=10) exp=`${u.val/10} decena(s) X`;
+  else if(u.val>=5) exp=`5 (V) + ${u.val-5} unidad(es) I`;
+  else exp=`${u.val} unidad(es) I`;
+
+  html+=`<tr><td><b>${u.name}</b></td><td>${u.val}</td><td><b class="rom">${r}</b></td><td>${exp}</td></tr>`;
+ });
+ html+=`</tbody></table>`;
+ decRes.innerHTML=html;
+
+ // Aproximaciones
+ const roundings=[
+  {id:"D",base:10,elApp:$("appD"),elDiff:$("diffD")},
+  {id:"C",base:100,elApp:$("appC"),elDiff:$("diffC")},
+  {id:"M",base:1000,elApp:$("appM"),elDiff:$("diffM")}
+ ];
+
+ roundings.forEach(r=>{
+  const approx=Math.round(n/r.base)*r.base;
+  if(approx>=1 && approx<=3999){
+   const diff=approx-n;
+   const diffStr=diff===0?"Exacto":(diff>0?`+${diff} respecto al original`:`${diff} respecto al original`);
+   r.elApp.textContent=`${approx} (${toR(approx)})`;
+   r.elDiff.textContent=diffStr;
+  }else if(approx===0){
+   r.elApp.textContent="No existe (0)";
+   r.elDiff.textContent=`-${n} (el 0 no existe en romano)`;
+  }else{
+   r.elApp.textContent="Excede 3999";
+   r.elDiff.textContent=`+${approx-n}`;
+  }
+ });
+}
+$("decIn").oninput=updateDecomp;
+
+/* Reto Descomposición y Aproximación */
+let qDec=null,okDec=0,totDec=0,streakDec=0,doneDec=false;
+function newQDec(){
+ const n=1+Math.floor(Math.random()*999)+10; // 11 a 1008
+ const type=Math.floor(Math.random()*3); // 0: decomp arábiga, 1: approx decena, 2: approx centena
+ doneDec=false;
+ $("qDecText").textContent="";
+ if(type===0){
+  const units=[
+   Math.floor(n/1000)*1000,
+   Math.floor((n%1000)/100)*100,
+   Math.floor((n%100)/10)*10,
+   n%10
+  ].filter(v=>v>0);
+  qDec={ans:units.join("+"),n,type,explain:`La descomposición aditiva de ${n} es ${units.join(" + ")}.`};
+  $("qDecText").append(`Descompón en suma el número ${n} (ejemplo: 100+40+7):`);
+ }else if(type===1){
+  const app=Math.round(n/10)*10;
+  const rom=toR(app);
+  qDec={ans:app.toString(),ansAlt:rom,n,type,explain:`El número ${n} aproximado a las decenas es ${app} (${rom}).`};
+  $("qDecText").append(`¿A qué DECENA más cercana se aproxima ${n} (${toR(n)})? (Escribe el número):`);
+ }else{
+  const app=Math.round(n/100)*100;
+  const rom=app>0?toR(app):"0";
+  qDec={ans:app.toString(),ansAlt:rom,n,type,explain:`El número ${n} aproximado a las centenas es ${app}${app>0?" ("+rom+")":""}.`};
+  $("qDecText").append(`¿A qué CENTENA más cercana se aproxima ${n} (${toR(n)})? (Escribe el número):`);
+ }
+ $("qDecIn").value="";$("qDecMsg").textContent="";$("qDecGo").textContent="Comprobar";$("qDecIn").focus();
+}
+
+function checkDec(){
+ if(doneDec){newQDec();return}
+ const input=$("qDecIn").value.trim().replaceAll(" ","").toUpperCase();
+ if(!input)return;
+ let good=false;
+ if(qDec.type===0){
+  good=input===qDec.ans||input===qDec.ans.split("+").map(v=>toR(parseInt(v,10))).join("+");
+ }else{
+  good=input===qDec.ans||input===qDec.ansAlt;
+ }
+ totDec++;doneDec=true;
+ if(good){
+  okDec++;streakDec++;$("qDecMsg").className="msg ok";$("qDecMsg").textContent="¡Correcto! "+qDec.explain;
+ }else{
+  streakDec=0;$("qDecMsg").className="msg bad";$("qDecMsg").textContent="No es correcto. "+qDec.explain;
+ }
+ $("qDecScore").textContent="Aciertos: "+okDec+" de "+totDec+" · Racha: "+streakDec;$("qDecGo").textContent="Siguiente";
+}
+$("qDecGo").onclick=checkDec;
+$("qDecIn").onkeydown=e=>{if(e.key==="Enter")checkDec()};
+newQDec();
+
+/* Aprender: letras */
+["I","V","X","L","C","D","M"].forEach(l=>{
+ const d=document.createElement("div");d.className="sym";
+ const a=document.createElement("span");a.className="rom";a.textContent=l;
+ const b=document.createElement("span");b.textContent=V[l];d.append(a,b);$("syms").append(d);
+ const p=document.createElement("button");p.textContent=l;p.onclick=()=>{build+=l;showB()};$("pad").append(p);
+});
+let build="";
+function showB(){
+ $("bOut").textContent=build||"\u00a0";
+ if(!build){$("bMsg").textContent="";return}
+ const n=fromR(build);
+ if(n===null){$("bMsg").className="msg bad";$("bMsg").textContent="Todavía no es un número romano válido. Revisa las reglas."}
+ else{$("bMsg").className="msg ok";$("bMsg").textContent=build+" = "+n}
+}
+$("bBack").onclick=()=>{build=build.slice(0,-1);showB()};
+$("bClear").onclick=()=>{build="";showB()};
+
+/* Aprender: reto */
+let lvl=20,q=null,ok=0,tot=0,streak=0,done=false;
+document.querySelectorAll("#lvl button").forEach(b=>b.onclick=()=>{
+ lvl=Number(b.dataset.l);document.querySelectorAll("#lvl button").forEach(x=>x.setAttribute("aria-pressed",x===b));newQ()});
+function newQ(){
+ const n=1+Math.floor(Math.random()*lvl),t=Math.random()<.5?"toR":"toN";q={n,t};done=false;
+ $("qText").textContent="";
+ if(t==="toR"){$("qText").append("Escribe en romano: "+n)}
+ else{$("qText").append("¿Qué número es ");const s=document.createElement("span");s.className="rom";s.textContent=toR(n);$("qText").append(s,"?")}
+ $("qIn").value="";$("qMsg").textContent="";$("qGo").textContent="Comprobar";$("qIn").focus();
+}
+function check(){
+ if(done){newQ();return}
+ const a=$("qIn").value.trim().toUpperCase();if(!a)return;
+ const good=q.t==="toR"?a===toR(q.n):Number(a)===q.n;
+ tot++;done=true;
+ if(good){ok++;streak++;$("qMsg").className="msg ok";$("qMsg").textContent="¡Correcto!"}
+ else{streak=0;$("qMsg").className="msg bad";$("qMsg").textContent="No es esa. La respuesta es "+(q.t==="toR"?toR(q.n):q.n)+" ("+toR(q.n)+" = "+q.n+")."}
+ $("qScore").textContent="Aciertos: "+ok+" de "+tot+" · Racha: "+streak;$("qGo").textContent="Siguiente";
+}
+$("qGo").onclick=check;
+$("qIn").onkeydown=e=>{if(e.key==="Enter")check()};
+newQ();
+
+/* Curiosidad */
+function doName(){
+ const raw=$("nm").value.trim(),uv=$("uv").checked;
+ $("letters").textContent="";
+ if(!raw){$("nmOut").textContent="\u00a0";$("nmMsg").textContent="";return}
+ let sum=0;
+ for(const ch of raw.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase()){
+  if(!/[A-ZÑ]/.test(ch))continue;
+  const k=(uv&&ch==="U")?"V":ch,val=V[k]||0;sum+=val;
+  const d=document.createElement("div");d.className="lt"+(val?" hit":"");d.textContent=ch;
+  const s=document.createElement("small");s.textContent=val||"–";d.append(s);$("letters").append(d);
+ }
+ if(sum===0){$("nmOut").textContent="0";$("nmMsg").className="msg";$("nmMsg").textContent="Tu nombre no tiene letras romanas. Vale 0, ¡y los romanos no tenían cero!";return}
+ $("nmMsg").className="msg";
+ if(sum>3999){$("nmOut").textContent=String(sum);$("nmMsg").textContent="Tu nombre suma "+sum+". Es tan grande que los romanos habrían usado rayas encima de las letras.";return}
+ $("nmOut").textContent=toR(sum);
+ $("nmMsg").textContent="Las letras marcadas suman "+sum+", que en romano se escribe "+toR(sum)+".";
+}
+$("nm").oninput=doName;$("uv").onchange=doName;
+const F=["Los romanos no tenían el cero. Por eso no existe una cifra romana para el 0.",
+"En muchos relojes el 4 se escribe IIII en vez de IV. Así se ve más equilibrado y no se confunde con VI al revés.",
+"El año 2000 es MM, y el 1999 es MCMXCIX, ¡de las fechas más largas del siglo!",
+"Las películas y las series usan números romanos para los años y las secuelas, como Rocky II o Star Wars Episodio IV.",
+"Los Juegos Olímpicos, los reyes y los papas usan números romanos: Felipe VI, Juan Pablo II.",
+"Los capítulos de los libros y los siglos se escriben a menudo con romanos: el siglo XXI.",
+"El número más grande que se puede escribir con estas reglas es 3999: MMMCMXCIX.",
+"El nombre más fácil de convertir es el que tiene más I, V, X, L, C, D y M. ¡Prueba con nombres como Lidia o Vicente!"];
+let fi=Math.floor(Math.random()*F.length);
+function showF(){$("fact").textContent=F[fi]}showF();
+$("more").onclick=()=>{fi=(fi+1)%F.length;showF()};
+
+/* Modo claro / oscuro */
+const root=document.documentElement,th=$("theme"),mq=matchMedia("(prefers-color-scheme:dark)");
+const isDark=()=>root.dataset.theme?root.dataset.theme==="dark":mq.matches;
+function paintTh(){th.textContent=isDark()?"☀️":"🌙"}
+try{const s=localStorage.getItem("romanos-tema");if(s)root.dataset.theme=s}catch(e){}
+th.onclick=()=>{const n=isDark()?"light":"dark";root.dataset.theme=n;try{localStorage.setItem("romanos-tema",n)}catch(e){}paintTh()};
+mq.addEventListener("change",paintTh);paintTh();
+
+/* Huevos de pascua */
+const eg=$("egg");
+function fanfare(){try{const A=new (window.AudioContext||window.webkitAudioContext)();[[392,0],[392,.18],[523,.36],[659,.6],[784,.9]].forEach(([f,t])=>{const o=A.createOscillator(),g=A.createGain(),s=A.currentTime+t;o.type="triangle";o.frequency.value=f;g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(.18,s+.03);g.gain.exponentialRampToValueAtTime(.0001,s+.3);o.connect(g);g.connect(A.destination);o.start(s);o.stop(s+.35)})}catch(e){}}
+function laurels(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;for(let i=0;i<28;i++){const s=document.createElement("span");s.className="fall";s.textContent="🌿";s.style.left=Math.random()*100+"vw";s.style.animationDuration=(2+Math.random()*2.5)+"s";s.style.animationDelay=Math.random()*1.2+"s";s.style.fontSize=(18+Math.random()*16)+"px";document.body.append(s);setTimeout(()=>s.remove(),5500)}}
+function eggShow(ls,t,p,fx){
+ $("eggL").textContent="";
+ ls.forEach((c,i)=>{const s=document.createElement("span");s.className="lt hit";s.textContent=c;s.style.animationDelay=(i*.25)+"s";$("eggL").append(s)});
+ $("eggT").textContent=t;$("eggP").textContent=p;eg.classList.add("on");
+ if(fx){laurels();fanfare()}
+}
+eg.onclick=()=>eg.classList.remove("on");
+document.addEventListener("keydown",e=>{if(e.key==="Escape")eg.classList.remove("on")});
+const st={};
+function trig(k,cond,fn){if(cond){if(!st[k]){st[k]=1;fn()}}else st[k]=0}
+const egg1666=()=>eggShow("MDCLXVI".split(""),"¡El número de las 7 letras!","MDCLXVI = 1666 usa las siete letras romanas, una sola vez y de mayor a menor. ¡Es único!",true);
+const eggZero=()=>eggShow(["N","U","L","L","A"],"Nulla","Los romanos no tenían cero. Para decir «nada» usaban la palabra latina nulla. ¡Has encontrado el número que no existe!",false);
+$("n").addEventListener("input",()=>{const v=$("n").value.trim();trig("n66",v==="1666",egg1666);trig("n0",v!==""&&Number(v)===0,eggZero)});
+$("r").addEventListener("input",()=>trig("r66",$("r").value.trim().toUpperCase()==="MDCLXVI",egg1666));
+const _sb=showB;showB=function(){_sb();trig("b66",build==="MDCLXVI",egg1666)};
+$("nm").addEventListener("input",()=>{const s=$("nm").value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();trig("cs",/cesar|julio/.test(s),()=>eggShow(["VENI","VIDI","VICI"],"Veni, vidi, vici","Así presumía Julio César: «llegué, vi, vencí». Tu nombre vale "+$("nmOut").textContent.trim()+" en romano.",true))});
+$("nm").addEventListener("input",()=>{const s=$("nm").value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ");trig("jc",/jacobo caselas/.test(s),()=>eggShow(["JACOBO","CASELAS"],"Creador del programa","¡Has encontrado al creador de este programa! Su nombre vale "+$("nmOut").textContent.trim()+" en romano.",true))});
+let taps=0,tt;
+$("title").onclick=()=>{taps++;clearTimeout(tt);tt=setTimeout(()=>taps=0,1500);if(taps>=5){taps=0;if(document.body.classList.toggle("col"))eggShow(["AVE","CAESAR"],"¡Modo Coliseo!","Pulsa el título otras 5 veces para volver al modo normal.",true)}};
+</script>
+</body>
+</html>
